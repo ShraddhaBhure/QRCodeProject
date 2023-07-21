@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="IronBarCode">
+      <HintPath>..\..\Nuget_ZipFolders\barcod\lib\netstandard2.0\IronBarCode.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\GeneratedQRCode\" />
+  </ItemGroup>
+
+</Project>
