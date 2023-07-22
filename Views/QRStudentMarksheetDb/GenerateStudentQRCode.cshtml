@@ -1,0 +1,32 @@
+﻿@model GenerateQRStudentId
+
+@{
+    ViewData["Title"] = "Generate QR Code";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.QrCodeUri))
+{
+    <h2>Generated QR Code</h2>
+    <img src="@ViewBag.QrCodeUri" alt="QR Code">
+}
+else
+{
+    <h2>Enter Student Id to Generate QR Code</h2>
+    <form method="post" asp-action="GenerateStudentQRCode">
+        <div class="form-group">
+            <label asp-for="StudentId">Enter Student Id:</label>
+            <input asp-for="StudentId" class="form-control" />
+            <span asp-validation-for="StudentId" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Generate QR Code</button>
+    </form>
+}

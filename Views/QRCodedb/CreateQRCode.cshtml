@@ -1,0 +1,25 @@
+﻿@model GenerateQRCodeModel
+
+@{
+    ViewData["Title"] = "Generate QR Code";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (ViewBag.QrCodeUri != null)
+{
+    <h2>Generated QR Code</h2>
+    <img src="@ViewBag.QrCodeUri" alt="QR Code">
+}
+else
+{
+    <h2>Enter Text to Generate QR Code</h2>
+    <form method="post" asp-action="CreateQRCode">
+        <div class="form-group">
+            <label asp-for="QRCodeText">Enter Text:</label>
+            <input asp-for="QRCodeText" class="form-control" />
+            <span asp-validation-for="QRCodeText" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Generate QR Code</button>
+    </form>
+}
