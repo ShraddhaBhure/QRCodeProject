@@ -33,7 +33,7 @@ namespace QRCodeProject.Controllers
             try
             {
                 GeneratedBarcode barcode = QRCodeWriter.CreateQrCode(generateQRCode.QRCodeText, 200);
-                barcode.AddBarcodeValueTextBelowBarcode();
+              //  barcode.AddBarcodeValueTextBelowBarcode();
                 // Styling a QR code and adding annotation text
                 barcode.SetMargins(10);
                 barcode.ChangeBarCodeColor(Color.BlueViolet);

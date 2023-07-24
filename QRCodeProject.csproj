@@ -5,8 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="Barcode.Generator">
+      <HintPath>..\..\Nuget_ZipFolders\barcode.Generator\lib\netstandard2.0\Barcode.Generator.dll</HintPath>
+    </Reference>
+    <Reference Include="BarCodeGenerator">
+      <HintPath>..\..\Nuget_ZipFolders\BarcodeGenerator\lib\BarCodeGenerator.dll</HintPath>
+    </Reference>
     <Reference Include="IronBarCode">
       <HintPath>..\..\Nuget_ZipFolders\barcod\lib\netstandard2.0\IronBarCode.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing">
+      <HintPath>..\..\Nuget_ZipFolders\zing\lib\net20\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation">
+      <HintPath>..\..\Nuget_ZipFolders\ZingNet\lib\net45\zxing.presentation.dll</HintPath>
     </Reference>
   </ItemGroup>
 
@@ -18,6 +30,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="ZXing" Version="2.1.1" />
+    <PackageReference Include="ZXing.Net" Version="0.16.5" />
   </ItemGroup>
 
 </Project>

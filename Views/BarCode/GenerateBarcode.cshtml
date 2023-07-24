@@ -1,0 +1,19 @@
+﻿@model int
+
+<h2>Generate Barcode for Product</h2>
+
+@using (Html.BeginForm("GenerateBarcode", "Product", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model, "Product ID:")
+        @Html.TextBoxFor(model => model, new { @class = "form-control", type = "number", min = "1", required = "required" })
+    </div>
+    <button type="submit" class="btn btn-primary">Generate Barcode</button>
+}
+
+@if (ViewBag.BarcodeImage != null)
+{
+    <hr />
+    <h3>Generated Barcode</h3>
+    <img src="@ViewBag.BarcodeImage" alt="Barcode" />
+}

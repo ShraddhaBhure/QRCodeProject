@@ -19,6 +19,7 @@ namespace QRCodeProject.Data
 
         public DbSet<QRCodeData> QRCodeData { get; set; }
         public DbSet<QRStudentMarsheet> QRStudentMarsheet { get; set; }
+        public DbSet<ProductBarCode> ProductBarCode { get; set; }
 
 
     }
