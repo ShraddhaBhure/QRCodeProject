@@ -1,58 +1,72 @@
-﻿using IronBarCode;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using QRCodeProject.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using QRCodeInASPNetCore.Models;
+using QRCoder;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using static QRCoder.PayloadGenerator;
 
-namespace QRCodeProject.Controllers
+namespace QRCodeInASPNetCore.Controllers
 {
     public class QRCodeController : Controller
     {
-        private readonly IWebHostEnvironment _environment;
-
-        public QRCodeController(IWebHostEnvironment environment)
-        {
-            _environment = environment;
-        }
         public IActionResult Index()
         {
-            return View();
+            QRCodeModel model = new QRCodeModel();
+            return View(model);
         }
-        public IActionResult CreateQRCode()
-        {
-            return View();
-        }
+
         [HttpPost]
-        public IActionResult CreateQRCode(GenerateQRCodeModel generateQRCode)
+        public IActionResult Index(QRCodeModel model)
         {
-            try
+
+            Payload payload = null;
+
+            switch (model.QRCodeType)
             {
-                GeneratedBarcode barcode = QRCodeWriter.CreateQrCode(generateQRCode.QRCodeText, 200);
-              //  barcode.AddBarcodeValueTextBelowBarcode();
-                // Styling a QR code and adding annotation text
-                barcode.SetMargins(10);
-                barcode.ChangeBarCodeColor(Color.BlueViolet);
-                string path = Path.Combine(_environment.WebRootPath, "GeneratedQRCode");
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-                string filePath = Path.Combine(_environment.WebRootPath, "GeneratedQRCode/qrcode.png");
-                barcode.SaveAsPng(filePath);
-                string fileName = Path.GetFileName(filePath);
-                string imageUrl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}" + "/GeneratedQRCode/" + fileName;
-                ViewBag.QrCodeUri = imageUrl;
+                case 1: // website url
+                    payload = new Url(model.WebsiteURL);
+                    break;
+                case 2: // bookmark url
+                    payload = new Bookmark(model.BookmarkURL, model.BookmarkURL);
+                    break;
+                case 3: // compose sms
+                    payload = new SMS(model.SMSPhoneNumber, model.SMSBody);
+                    break;
+                case 4: // compose whatsapp message
+                    payload = new WhatsAppMessage(model.WhatsAppNumber, model.WhatsAppMessage);
+                    break;
+                case 5://compose email
+                    payload = new Mail(model.ReceiverEmailAddress, model.EmailSubject, model.EmailMessage);
+                    break;
+                case 6: // wifi qr code
+                    payload = new WiFi(model.WIFIName, model.WIFIPassword, WiFi.Authentication.WPA);
+                    break;
+
             }
-            catch (Exception)
+
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(payload);
+            QRCode qrCode = new QRCode(qrCodeData);
+            var qrCodeAsBitmap = qrCode.GetGraphic(20);
+
+            // use this when you want to show your logo in middle of QR Code and change color of qr code
+            //Bitmap logoImage = new Bitmap(@"wwwroot/img/Virat-Kohli.jpg");
+            //var qrCodeAsBitmap = qrCode.GetGraphic(20, Color.Black, Color.Red, logoImage);
+
+            string base64String = Convert.ToBase64String(BitmapToByteArray(qrCodeAsBitmap));
+            model.QRImageURL = "data:image/png;base64," + base64String;
+            return View("Index", model);
+        }
+
+        private byte[] BitmapToByteArray(Bitmap bitmap)
+        {
+            using (MemoryStream ms = new MemoryStream())
             {
-                throw;
+                bitmap.Save(ms, ImageFormat.Png);
+                return ms.ToArray();
             }
-            return View();
         }
     }
 }
